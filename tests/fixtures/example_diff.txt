@@ -1,0 +1,60 @@
+# Example CLI dump, written by hand as a test fixture.
+# Not from a real aircraft. Deliberately contains several of the mistakes
+# the review command looks for.
+
+# diff all
+
+# version
+# Betaflight / STM32F405 (S405) 4.4.2 Jun  5 2023 / 06:31:34 (7c5770c1c)
+
+board_name MATEKF405
+manufacturer_id MTKS
+
+# feature
+feature -RX_PARALLEL_PWM
+feature RX_SERIAL
+feature TELEMETRY
+feature AIRMODE
+
+# serial
+serial 0 64 115200 57600 0 115200
+
+# master
+set gyro_lpf1_static_hz = 250
+set gyro_lpf2_static_hz = 500
+set dyn_notch_count = 3
+set dyn_notch_q = 300
+set dyn_notch_min_hz = 100
+set dyn_notch_max_hz = 400
+set rpm_filter_harmonics = 3
+set dshot_bidir = OFF
+set motor_poles = 14
+set motor_pwm_protocol = DSHOT600
+set failsafe_procedure = DROP
+set gyro_to_use = FIRST
+
+profile 0
+set p_roll = 45
+set i_roll = 80
+set d_roll = 40
+set d_min_roll = 30
+set p_pitch = 47
+set i_pitch = 84
+set d_pitch = 46
+set d_min_pitch = 34
+set p_yaw = 45
+set i_yaw = 80
+set d_yaw = 0
+set dterm_lpf1_static_hz = 145
+set dterm_lpf2_static_hz = 145
+set feedforward_transition = 0
+
+rateprofile 0
+set rates_type = ACTUAL
+set roll_rc_rate = 12
+set pitch_rc_rate = 12
+set yaw_rc_rate = 12
+set roll_expo = 0
+set roll_srate = 67
+
+save
