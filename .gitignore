@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Logs and dumps are personal to a build; keep them out of the repo.
+*.BFL
+*.BBL
+*.csv
+!tests/fixtures/*.csv
+mytune*.txt
+
+# macOS
+.DS_Store
+
+# Your own logs and dumps. Never committed.
+data/
