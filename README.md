@@ -8,5 +8,10 @@ Everything except log analysis is standard library only.
 
 ## Status
 
-Early days. The CLI dump parser is in; the airframe model, planner, review and
-log analysis are on the way.
+Early days, built up a piece at a time. In so far:
+
+- **dump** — parse a `diff all` into an addressable tune and re-emit it unchanged.
+- **categories** — sort setting names into the groups a pilot thinks in.
+
+Still to come: the airframe model, the filter planner, config review and
+blackbox log analysis.
