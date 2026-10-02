@@ -12,18 +12,27 @@ from bftune import categories
 class TestCategorise(unittest.TestCase):
 
     def test_pid_loop_terms(self):
-        for name in ("p_roll", "i_pitch", "d_yaw", "d_min_roll",
-                     "anti_gravity_gain", "feedforward_transition"):
+        for name in ("p_roll", "i_pitch", "d_yaw", "f_roll", "d_min_roll",
+                     "anti_gravity_gain", "feedforward_transition",
+                     "iterm_relax", "tpa_rate", "thrust_linear"):
             self.assertEqual(categories.categorise(name), categories.PID, name)
 
     def test_filters(self):
         for name in ("gyro_lpf1_static_hz", "dterm_notch_hz", "dyn_notch_max_hz",
-                     "rpm_filter_harmonics", "dshot_bidir", "simplified_gyro_filter"):
+                     "dyn_notch_q", "rpm_filter_harmonics", "dshot_bidir",
+                     "simplified_gyro_filter"):
             self.assertEqual(categories.categorise(name), categories.FILTER, name)
 
     def test_rates_and_rc(self):
         self.assertEqual(categories.categorise("roll_rc_rate"), categories.RATES)
+        self.assertEqual(categories.categorise("roll_srate"), categories.RATES)
         self.assertEqual(categories.categorise("rc_smoothing"), categories.RC)
+
+    def test_motor_failsafe_and_osd(self):
+        self.assertEqual(categories.categorise("motor_poles"), categories.MOTOR)
+        self.assertEqual(categories.categorise("failsafe_procedure"),
+                         categories.FAILSAFE)
+        self.assertEqual(categories.categorise("osd_warnings"), categories.OSD)
 
     def test_unknown_names_land_in_other_rather_than_being_dropped(self):
         self.assertEqual(categories.categorise("some_future_setting"),
@@ -45,6 +54,10 @@ class TestGrouping(unittest.TestCase):
         grouped = categories.group(["dyn_notch_max_hz", "p_roll"])
         seen = [category for category, _title, _names in categories.in_order(grouped)]
         self.assertEqual(seen, [categories.PID, categories.FILTER])
+
+    def test_every_category_has_a_title(self):
+        for category in categories.ORDER:
+            self.assertIn(category, categories.TITLES)
 
 
 if __name__ == "__main__":
