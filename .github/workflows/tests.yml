@@ -1,0 +1,46 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install numpy
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+
+  # The log analysis skips itself without numpy, and everything else has to
+  # keep working on a bare interpreter. This job proves that stays true.
+  stdlib-only:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Run tests with no third party packages
+        run: python -m unittest discover -s tests
+      - name: The other commands must still run
+        run: |
+          python -m bftune plan --preset 5inch-6s
+          python -m bftune review tests/fixtures/example_diff.txt --preset 5inch-6s || true
+          python -m bftune compare tests/fixtures/example_diff.txt tests/fixtures/example_diff_after.txt
